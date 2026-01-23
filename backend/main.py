@@ -30,7 +30,8 @@ class TodoItem(db.Model):
         return {
             "id" : self.id,
             "title": self.title,
-            "done": self.done
+            "done": self.done,
+            "comments": [ comment.to_dict() for comment in self.comments]
         }
 
 class Comment(db.Model):
@@ -40,6 +41,12 @@ class Comment(db.Model):
 
     todo: Mapped["TodoItem"] = relationship(back_populates="comments")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "message": self.message,
+            "todo_id": self.todo_id
+        }
 
 INITIAL_TODOS = [
     TodoItem(title='Learn Flask'),
