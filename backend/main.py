@@ -5,6 +5,8 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from flask_migrate import Migrate 
+from sqlalchemy import Integer, String, ForeignKey 
+from sqlalchemy.orm import Mapped, mapped_column, relationship  
 
 app = Flask(__name__)
 
@@ -14,6 +16,7 @@ CORS(app)
 class Base(DeclarativeBase):
     pass
 
+
 db = SQLAlchemy(app, model_class=Base)
 migrate = Migrate(app, db)
 
@@ -21,6 +24,7 @@ class TodoItem(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key = True)
     title: Mapped[str] = mapped_column(String(100))
     done: Mapped[bool] = mapped_column(default=False)
+    comments: Mapped[list["Comment"]] = relationship(back_populates="todo")
 
     def to_dict(self):
         return {
@@ -28,6 +32,14 @@ class TodoItem(db.Model):
             "title": self.title,
             "done": self.done
         }
+
+class Comment(db.Model):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    message: Mapped[str] = mapped_column(String(250))
+    todo_id: Mapped[int] = mapped_column(ForeignKey('todo_item.id'))
+
+    todo: Mapped["TodoItem"] = relationship(back_populates="comments")
+
 
 INITIAL_TODOS = [
     TodoItem(title='Learn Flask'),
