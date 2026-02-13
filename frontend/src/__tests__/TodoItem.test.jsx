@@ -31,6 +31,8 @@ it('renders with comments correctly', () => {
     <TodoItem todo={todoWithComment} />
   );
   expect(screen.getByText('Sample Todo')).toBeInTheDocument();
+  expect(screen.getByText('First comment')).toBeInTheDocument();
+  expect(screen.getByText('Another comment')).toBeInTheDocument();
   //
   // *** TODO: ให้เพิ่ม assertion ว่ามีข้อความ First comment และ Another comment บนหน้าจอ
   //
