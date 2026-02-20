@@ -13,8 +13,9 @@ function TodoList({ apiUrl }) {
   const [newComments, setNewComments] = useState({});
 
   useEffect(() => {
+    if (!accessToken) return;
     fetchTodoList();
-  }, []);
+  }, [username]);
 
   async function fetchTodoList() {
     try {
@@ -29,9 +30,8 @@ function TodoList({ apiUrl }) {
       const data = await response.json();
       setTodoList(data);
     } catch (err) {
-      alert(
-        "Failed to fetch todo list from backend. Make sure the backend is running."
-      );
+      //   alert("Failed to fetch todo list from backend. Make sure the backend is running.")
+      setTodoList([]);
     }
   }
 
@@ -40,6 +40,9 @@ function TodoList({ apiUrl }) {
     try {
       const response = await fetch(toggle_api_url, {
         method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       if (response.ok) {
         const updatedTodo = await response.json();
@@ -58,7 +61,9 @@ function TodoList({ apiUrl }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
+
         body: JSON.stringify({ title: newTitle }),
       });
       if (response.ok) {
@@ -76,6 +81,9 @@ function TodoList({ apiUrl }) {
     try {
       const response = await fetch(delete_api_url, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       if (response.ok) {
         setTodoList(todoList.filter((todo) => todo.id !== id));
@@ -92,7 +100,9 @@ function TodoList({ apiUrl }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
+
         body: JSON.stringify({ message: newComment }),
       });
       if (response.ok) {
@@ -105,8 +115,12 @@ function TodoList({ apiUrl }) {
 
   return (
     <>
-      <br />
-      <a href="/about">About</a>
+      <h1>Todo List</h1>
+      {username && (
+        <p>
+          Logged in as: <b>{username}</b>
+        </p>
+      )}
       <h1>Todo List</h1>
       <ul>
         {todoList.map((todo) => (
@@ -134,6 +148,22 @@ function TodoList({ apiUrl }) {
       >
         Add
       </button>
+      <br />
+      <a href="/about">About</a>
+      <br />
+      {username && (
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            logout();
+          }}
+        >
+          Logout
+        </a>
+      )}
+      <br />
+      <a href="/login">Login</a>
     </>
   );
 }
