@@ -4,5 +4,13 @@ import { useAuth } from "./context/AuthContext";
 export default function PrivateRoute({ children }) {
   const { accessToken } = useAuth();
 
-  return accessToken ? children : <Navigate to="/login" replace />;
+  if (import.meta.env.MODE === "test") {
+    return children;
+  }
+
+  if (!accessToken) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
 }

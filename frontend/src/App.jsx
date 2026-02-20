@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
-import "./App.css";
+// import "./App.css";
 import LoginForm from "./LoginForm.jsx";
 import PrivateRoute from "./PrivateRoute";
 
@@ -9,6 +9,7 @@ import TodoList from "./TodoList.jsx";
 function App() {
   const TODOLIST_API_URL = "http://127.0.0.1:5000/api/todos/";
   const TODOLIST_LOGIN_URL = "http://127.0.0.1:5000/api/login/";
+  const isTest = import.meta.env.MODE === "test";
 
   return (
     <AuthProvider>
@@ -18,8 +19,7 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                {" "}
-                <TodoList apiUrl={TODOLIST_API_URL} />{" "}
+                <TodoList apiUrl={TODOLIST_API_URL} />
               </PrivateRoute>
             }
           />

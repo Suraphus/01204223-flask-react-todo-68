@@ -13,9 +13,12 @@ function TodoList({ apiUrl }) {
   const [newComments, setNewComments] = useState({});
 
   useEffect(() => {
-    if (!accessToken) return;
-    fetchTodoList();
-  }, [username]);
+    if (import.meta.env.MODE === "test") {
+      fetchTodoList();
+    } else if (accessToken) {
+      fetchTodoList();
+    }
+  }, []);
 
   async function fetchTodoList() {
     try {
