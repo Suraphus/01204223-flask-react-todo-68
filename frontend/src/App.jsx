@@ -84,9 +84,9 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'message': newComment }),
+        body: JSON.stringify({ 'message': newComment }),  
       });
-      if (response.ok) {
+      if (response.ok) { 
         await fetchTodoList();
       }
     } catch (error) {

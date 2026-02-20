@@ -42,7 +42,7 @@ it('renders with comments correctly', () => {
     ]
   };
   render(
-    <TodoItem todo={todoWithComment} />
+    <TodoItem todo={todoWithComment} /> 
   );
   expect(screen.getByText('Sample Todo')).toBeInTheDocument();
   expect(screen.getByText('First comment')).toBeInTheDocument();
