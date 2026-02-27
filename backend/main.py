@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate  
@@ -9,8 +10,8 @@ from flask_jwt_extended import JWTManager
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todos.db'
-app.config['JWT_SECRET_KEY'] = 'fdsjkfjioi2rjshr2345hrsh043j5oij5545'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI','sqlite:///todos.db') 
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY','fdslkfjsdlkufewhjroiewurewrew')
 jwt = JWTManager(app)
 
 db.init_app(app)
